@@ -1,0 +1,52 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Ambientes virtuais ---
+.venv/
+venv/
+env/
+
+# --- Segredos e credenciais (NUNCA versionar) ---
+.env
+.env.*
+!.env.example
+*.pem
+.aws/
+
+# --- Dados (baixados pelo script, não versionados) ---
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# --- MLflow e artefatos de modelo ---
+mlruns/
+mlartifacts/
+models/*.pkl
+models/*.joblib
+
+# --- Logs de predição e relatórios gerados ---
+logs/
+reports/*.html
+
+# --- Testes e cobertura ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- IDEs e sistema ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Contexto local do Claude (cita a vaga, não publicar) ---
+CLAUDE.md
