@@ -30,8 +30,8 @@ Os dados não são versionados no repositório. O script `scripts/download_data.
 
 ```
                  ┌──────────────────────┐
-                 │  Treino (Scikit-learn)│
-                 │  + MLflow (tracking)  │
+                 │ Treino (Scikit-learn)│
+                 │ + MLflow (tracking)  │
                  └──────────┬───────────┘
                             │ modelo serializado
                             ▼
@@ -83,7 +83,7 @@ python scripts/download_data.py
 
 ## Roadmap
 
-- [ ] Repositório no GitHub e download da base
+- [x] Repositório no GitHub e download da base
 - [ ] Análise exploratória
 - [ ] Baseline com regressão logística e gradient boosting, rastreados no MLflow
 - [ ] Avaliação por AUC, KS e calibração
