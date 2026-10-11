@@ -28,9 +28,25 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 OUTPUT_CSV = RAW_DIR / "credit_default.csv"
 
-TARGET_ORIGINAL = "default payment next month"
 TARGET = "default"
 EXPECTED_ROWS = 30_000
+
+# Nomes originais da UCI -> nomes usados no projeto.
+# Os nomes originais confundem: PAY_0 é um código de situação (não um valor pago),
+# a sequência pula de PAY_0 para PAY_2 e o alvo tem espaços no nome.
+# O sufixo numérico indica o mês: 1 = setembro/2005 (mais recente) ... 6 = abril/2005.
+COLUMN_NAMES = {
+    "LIMIT_BAL": "credit_limit",
+    "SEX": "sex",
+    "EDUCATION": "education",
+    "MARRIAGE": "marriage",
+    "AGE": "age",
+    "PAY_0": "pay_status_1",
+    **{f"PAY_{i}": f"pay_status_{i}" for i in range(2, 7)},
+    **{f"BILL_AMT{i}": f"bill_amt_{i}" for i in range(1, 7)},
+    **{f"PAY_AMT{i}": f"pay_amt_{i}" for i in range(1, 7)},
+    "default payment next month": TARGET,
+}
 
 
 def download_zip(url: str) -> bytes:
@@ -54,16 +70,16 @@ def read_excel_from_zip(content: bytes) -> pd.DataFrame:
 
 
 def clean(df: pd.DataFrame) -> pd.DataFrame:
-    """Padroniza nomes de colunas e remove o ID (não é variável preditiva)."""
-    df = df.rename(columns={TARGET_ORIGINAL: TARGET})
-    df.columns = [c.strip().lower() for c in df.columns]
-    # PAY_0 é inconsistente com PAY_2..PAY_6 na base original; renomeamos para pay_1
-    df = df.rename(columns={"pay_0": "pay_1"})
-    return df.drop(columns=["id"])
+    """Remove o ID (não é variável preditiva) e aplica nomes de colunas claros."""
+    df = df.rename(columns=lambda c: c.strip())
+    return df.drop(columns=["ID"]).rename(columns=COLUMN_NAMES)
 
 
 def validate(df: pd.DataFrame) -> None:
     """Checagens mínimas para garantir que a base veio íntegra."""
+    assert list(df.columns) == list(COLUMN_NAMES.values()), (
+        f"Colunas inesperadas: {sorted(set(df.columns) ^ set(COLUMN_NAMES.values()))}"
+    )
     assert len(df) == EXPECTED_ROWS, f"Esperava {EXPECTED_ROWS} linhas, veio {len(df)}"
     assert TARGET in df.columns, "Coluna alvo não encontrada"
     assert set(df[TARGET].unique()) == {0, 1}, "Alvo deveria ser binário (0/1)"

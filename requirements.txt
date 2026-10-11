@@ -3,9 +3,11 @@ pandas>=2.2,<3
 requests>=2.32,<3
 xlrd>=2.0,<3          # leitura do .xls original da UCI
 
-# Dias 2 e 3: análise exploratória, modelo e rastreamento de experimentos
+# Dia 2: preparação dos dados e análise exploratória
+scikit-learn>=1.5,<2
+matplotlib>=3.9,<4
+ipykernel>=6.29,<8    # permite rodar notebooks no VS Code com o .venv
+
+# Dia 3: rastreamento de experimentos
 # (descomente quando chegar nessa etapa)
-# scikit-learn>=1.5,<2
 # mlflow>=2.16,<3
-# matplotlib>=3.9,<4
-# jupyter>=1.1,<2
